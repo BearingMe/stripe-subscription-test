@@ -1,6 +1,7 @@
 import type { CreateUser } from './types';
 import { createUser } from './lib';
 import { Router } from 'express';
+import { createResponseObject } from '../common/utils/responses';
 
 const users = Router();
 
@@ -9,14 +10,9 @@ const users = Router();
 // FIX: handle case where createUser fails or returns null/undefined
 users.post('/', async (req, res) => {
   const result = await createUser(req.body as CreateUser);
-  const response = createResponseObject("user", result)
+  const response = createResponseObject(result)
 
   res.status(201).json(response);
 });
-
-// TODO: move this function somewhere else
-function createResponseObject<T>(name: string, data: T) {
-  return { [name]: data }
-}
 
 export default users;
