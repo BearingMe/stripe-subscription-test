@@ -5,6 +5,7 @@ import { PrismaClient } from "../../generated/prisma";
 const prisma = new PrismaClient();
 
 // TODO: add error treatment 
+// TODO: create interface for return, so I can use select to filter out shit
 export async function createUser(data: CreateUser) {
   const { name, email } = data;
   return prisma.user.create({ data: { name, email }})

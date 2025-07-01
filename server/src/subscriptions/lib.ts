@@ -1,11 +1,11 @@
 import Stripe from "stripe";
-import type { AttachSubscriptionPaymentMethod, CreateSubscription, CreateSubscriptionCustomer } from "./types";
+import type { AttachSubscriptionPaymentMethod, CreateSubscriptionCheckout, CreateSubscriptionCustomer } from "./types";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // TODO: error handling
 // FIX: validate input (check for required fields and format)
-export function createSubscription(data: CreateSubscription) {
+export function createSubscriptionCheckout(data: CreateSubscriptionCheckout) {
   const { stripeCustomerId, stripePriceId, stripePaymentId } = data;
 
   return stripe.subscriptions.create({  

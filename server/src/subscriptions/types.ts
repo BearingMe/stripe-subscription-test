@@ -1,4 +1,4 @@
-export interface CreateSubscription { 
+export interface CreateSubscriptionCheckout { 
   stripeCustomerId: string, 
   stripePriceId: string, 
   stripePaymentId: string 
