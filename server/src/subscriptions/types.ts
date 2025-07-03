@@ -11,5 +11,5 @@ export interface CreateSubscriptionCustomer {
 }
 
 export interface AttachSubscriptionPaymentMethod {
-  customerStripeID: string;
+  customerStripeId: string;
 }
