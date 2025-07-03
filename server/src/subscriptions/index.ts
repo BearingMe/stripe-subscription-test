@@ -26,13 +26,15 @@ subscriptions.get('/products', async (_req, res) => {
 
 
 // TODO: add request body validation with Zod or Yup
-subscriptions.post('/customer', async (req, res) => {
+subscriptions.post('/customers', async (req, res) => {
   const customerData = req.body as CreateSubscriptionCustomer;
   const customer = await createSubscriptionCustomer(customerData);
-  res.status(201).json({ customer });
+  const response = createResponseObject(customer);
+
+  res.status(201).json(response);
 });
 
-subscriptions.post('/customer/payment-method/:id', async (req, res) => {
+subscriptions.post('/customers/payment-method/:id', async (req, res) => {
   const { id } = req.params;
   const data = req.body as AttachSubscriptionPaymentMethod;
 
@@ -40,10 +42,14 @@ subscriptions.post('/customer/payment-method/:id', async (req, res) => {
   res.status(200).json({ attached: result });
 });
 
+// TODO: forbit checkout two subscriptions at once
+// TODO: treat card errors
 subscriptions.post('/checkout', async (req, res) => {
   const data = req.body as CreateSubscriptionCheckout;
   const subscription = await createSubscriptionCheckout(data);
-  res.status(201).json({ subscription });
+  const response = createResponseObject(subscription);
+
+  res.status(201).json(response);
 });
 
 export default subscriptions;

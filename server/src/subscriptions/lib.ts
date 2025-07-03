@@ -5,14 +5,21 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // TODO: error handling
 // FIX: validate input (check for required fields and format)
-export function createSubscriptionCheckout(data: CreateSubscriptionCheckout) {
+export async function createSubscriptionCheckout(data: CreateSubscriptionCheckout) {
   const { stripeCustomerId, stripePriceId, stripePaymentId } = data;
 
-  return stripe.subscriptions.create({  
-    customer: stripeCustomerId,
-    items: [{ price: stripePriceId }],
-    default_payment_method: stripePaymentId
-  })
+  try {
+    return await stripe.subscriptions.create({  
+      customer: stripeCustomerId,
+      items: [{ price: stripePriceId }],
+      default_payment_method: stripePaymentId
+    })
+
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Unknown"
+    console.log(msg);
+  }
+
 }
 
 // TODO: error handling
@@ -31,12 +38,17 @@ export function createSubscriptionCustomer(data: CreateSubscriptionCustomer) {
 
 // TODO: error handling
 // FIX: check if payment method is already attached to customer
-export function attachSubscriptionPaymentMethod(id: string, data: AttachSubscriptionPaymentMethod) {
-  const { customerStripeID } = data;
+export async function attachSubscriptionPaymentMethod(id: string, data: AttachSubscriptionPaymentMethod) {
+  const { customerStripeId } = data;
+  
+  try {
+    return await stripe.paymentMethods.attach(id, {
+      customer: customerStripeId,
+    })
 
-  return stripe.paymentMethods.attach(id, {
-    customer: customerStripeID,
-  })
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 // TODO: error handling
