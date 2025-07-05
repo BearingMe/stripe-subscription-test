@@ -11,3 +11,5 @@ paymentMethodsController.post("/setup", async (req, res) => {
 
   res.status(201).json(response);
 });
+
+export default paymentMethodsController;

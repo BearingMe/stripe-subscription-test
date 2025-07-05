@@ -4,9 +4,9 @@ import { tryParseAsync } from "../../common/lib/validator";
 import customerService from "./customers.service";
 import { CreateCustomerSchema } from "./create-customer.schema";
 
-const customers = Router();
+const customersController = Router();
 
-customers.post("/", async (req, res) => {
+customersController.post("/", async (req, res) => {
   const payload = await tryParseAsync(CreateCustomerSchema, req.body);
   const newCustomer = customerService.create(payload);
   const response = createResponseObject(newCustomer);
@@ -14,4 +14,4 @@ customers.post("/", async (req, res) => {
   res.status(201).json(response);
 });
 
-export default customers;
+export default customersController;

@@ -1,9 +1,11 @@
 import { Router } from "express";
 import plansService from "./plans.service";
 
-const plans = Router();
+const plansController = Router();
 
-plans.get("/", async (_, res) => {
+plansController.get("/", async (_, res) => {
   const plans = await plansService.findAll();
   res.json(plans);
 });
+
+export default plansController;

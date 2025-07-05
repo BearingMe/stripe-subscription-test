@@ -10,3 +10,5 @@ subscriptionsController.post("/", (req, res) => {
 
   res.status(201).json(response);
 });
+
+export default subscriptionsController;
