@@ -1,5 +1,5 @@
-import type { CreateCustomer } from "./create-customer.dto";
-import type { Customer } from "./customer.interface";
+import type { CreateCustomer } from "./create-customer.schema";
+import type { Customer } from "./customer.entity";
 import type { Timestamp } from "../../common/types/misc";
 import { HttpError } from "../../common/exceptions/HttpError";
 import { stripe } from "../../common/lib/stripe";
