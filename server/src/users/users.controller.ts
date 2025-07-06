@@ -6,6 +6,11 @@ import usersService from "./users.service";
 
 const usersController = Router();
 
+usersController.get("/", async (_, res) => {
+  const users = await usersService.findAll();
+  res.json(users);
+});
+
 usersController.post("/", async (req, res) => {
   const payload = await tryParseAsync(CreateUserSchema, req.body);
   const newUser = await usersService.create(payload);
