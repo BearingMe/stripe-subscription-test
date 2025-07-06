@@ -1,9 +1,7 @@
-import type { Timestamp } from "../../common/types/misc";
-
 export interface Plan {
-  id: string;
+  uuid: string;
   active: boolean;
-  created: Timestamp;
+  price: number;
   metadata: Record<string, string>;
-  defaultPrice: string;
+  createdAt: Date;
 }

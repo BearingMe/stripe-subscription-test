@@ -1,31 +1,19 @@
-import type Stripe from "stripe";
-import type { Timestamp } from "../../common/types/misc";
+import type { StripePlansService } from "../../stripe/plans.service";
 import type { Plan } from "./plan.interface";
 import { HttpError } from "../../common/exceptions/HttpError";
-import { stripe } from "../../common/lib/stripe";
 import { extractErrorMessage } from "../../common/utils/errors";
-import assert from "node:assert";
 
 class PlansService {
-  async findAll() {
-    const mapStripeProductToPlan = (p: Stripe.Product): Plan => {
-      assert.strict(p.default_price, "Default price should exist");
+  constructor(private readonly stripePlansService: StripePlansService) {}
 
-      return {
-        id: p.id,
-        active: p.active,
-        created: p.created as Timestamp,
-        metadata: p.metadata,
-        defaultPrice: p.default_price.toString(),
-      };
-    };
-
+  async findAll(): Promise<Plan[]> {
     try {
-      const productList = await stripe.products.list();
-      const mapperProductList = productList.data.map(mapStripeProductToPlan);
-
-      return mapperProductList;
-      //
+      const productList = await this.stripePlansService.findAll();
+      return productList.map((p) => ({
+        uuid: p.stripeId, // TODO: replace with the one from database
+        price: 2000, // TODO: replace with the one from database, price in cents (BRL)
+        ...p,
+      }));
     } catch (error) {
       // TODO: improve erro treatment
       const msg = extractErrorMessage(error);
@@ -34,5 +22,6 @@ class PlansService {
   }
 }
 
-const plansService = new PlansService();
+import stripePlansServiceInjectable from "../../stripe/plans.service";
+const plansService = new PlansService(stripePlansServiceInjectable);
 export default plansService;
