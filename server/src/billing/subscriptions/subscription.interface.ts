@@ -1,12 +1,7 @@
-import type Stripe from "stripe";
-import type { Timestamp } from "../../common/types/misc";
-
-// TODO: change created to createdAt
-// TODO: change timestamp to Date
 export interface Subscription {
-  id: string;
-  created: Timestamp;
-  status: Stripe.Subscription.Status;
-  cancelAtPeriodEnd: boolean;
+  uuid: string;
+  status: "active" | "canceled" | "incomplete" | "incomplete_expired" | "past_due" | "paused" | "trialing" | "unpaid";
   metadata: Record<string, string>;
+  cancelAtPeriodEnd: boolean;
+  createdAt: Date;
 }

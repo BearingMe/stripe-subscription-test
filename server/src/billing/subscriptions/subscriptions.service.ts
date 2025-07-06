@@ -1,53 +1,60 @@
-import type Stripe from "stripe";
-import type { Timestamp } from "../../common/types/misc";
-import type { Subscription } from "./subscription.interface";
-import type { CreateSubscriptionDTO } from "./create-subscripton.dto";
+import type { StripeSubscriptionsService } from "../../stripe/subscriptions.service";
 import { HttpError } from "../../common/exceptions/HttpError";
-import { stripe } from "../../common/lib/stripe";
 import { extractErrorMessage } from "../../common/utils/errors";
 
+// return {
+//   stripeId: s.id,
+//   status: s.status,
+//   cancelAtPeriodEnd: s.cancel_at_period_end,
+//   metadata: s.metadata,
+//   createdAt: new Date(s.created * 1000),
+// };
+
+// export interface Subscription {
+//   uuid: string;
+//   status: Stripe.Subscription.Status;
+//   metadata: Record<string, string>;
+//   cancelAtPeriodEnd: boolean;
+//   createdAt: Date;
+// }
+
 class SubscriptionsService {
-  // TODO: standartize this fucking mapping functions
-  private mapStripeSubscription(s: Stripe.Subscription): Subscription {
-    return {
-      id: s.id,
-      created: s.created as Timestamp,
-      status: s.status,
-      cancelAtPeriodEnd: s.cancel_at_period_end,
-      metadata: s.metadata,
-    };
-  }
+  constructor(private readonly stripeSubscriptionsService: StripeSubscriptionsService) {}
 
-  private async findManyByCustomerId(id: string) {
+  async findManyByCustomerId(id: string): Promise<Subscription[]> {
     try {
-      const foundSubscriptions = await stripe.subscriptions.list({ customer: id });
-      const mappedSubscriptions = foundSubscriptions.data.map(this.mapStripeSubscription);
-
-      return mappedSubscriptions;
+      const foundSubscriptions = await this.stripeSubscriptionsService.findManyByCustomerId(id);
+      return foundSubscriptions.map((s) => ({
+        uuid: s.stripeId, // TODO: replace with system uuid
+        ...s,
+      }));
       //
     } catch (error) {
-      // TODO: erro treatment bla bla
       const msg = extractErrorMessage(error);
       throw new HttpError(msg, 400);
     }
   }
 
-  async create(data: CreateSubscriptionDTO) {
-    const { customerID, paymentMethodId, priceId } = data;
+  async create(data: CreateSubscriptionDTO): Promise<Subscription> {
+    const { stripeCustomerId, stripePaymentMethodId, stripePriceId } = data;
 
-    const foundSubscriptions = await this.findManyByCustomerId(customerID);
+    const foundSubscriptions = await this.findManyByCustomerId(stripeCustomerId);
     if (foundSubscriptions.some((s) => s.status === "active")) {
       throw new HttpError("Active subscription already in use", 400);
     }
 
     try {
-      const createdSubscription = await stripe.subscriptions.create({
-        customer: customerID,
-        items: [{ price: priceId }],
-        default_payment_method: paymentMethodId,
+      const createdSubscription = await this.stripeSubscriptionsService.create({
+        stripeCustomerId,
+        stripePaymentMethodId,
+        stripePriceId,
       });
 
-      return this.mapStripeSubscription(createdSubscription);
+      // FIX: desestruturing to return like that I a shitty idea
+      return {
+        uuid: createdSubscription.stripeId, // TODO: it will come from db
+        ...createdSubscription,
+      };
       //
     } catch (error) {
       const msg = extractErrorMessage(error);
@@ -56,5 +63,8 @@ class SubscriptionsService {
   }
 }
 
-const subscriptionsService = new SubscriptionsService();
+import stripeSubscriptionsServiceInjectable from "../../stripe/subscriptions.service";
+import type { Subscription } from "./subscription.interface";
+import type { CreateSubscriptionDTO } from "./create-subscripton.schema";
+const subscriptionsService = new SubscriptionsService(stripeSubscriptionsServiceInjectable);
 export default subscriptionsService;
