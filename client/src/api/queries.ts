@@ -1,24 +1,25 @@
+import type { Plan } from "../../../shared/entities/plan.entity";
+import type { User } from "../../../shared/entities/user.entity";
+import { USERS, BILLING_PLANS } from "../../../shared/constants/endpoints";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import http from "@/lib/http";
 
-export function useSubscriptionPlans() {
-  interface Product {
-    id: string;
-    name: string;
-    default_price: string;
-    active: boolean;
-  }
-
-  interface ProductList {
-    data: Product[];
-  }
-
+export function users() {
   return useQuery({
-    queryKey: ["subscriptions", "plans"],
+    queryKey: ["users"],
     queryFn: async () => {
-      const url = "http://localhost:3000/subscriptions/products";
-      const response = await axios.get<{ data: ProductList }>(url);
+      const response = await http.get<{ data: User[], total: number }>(USERS);
       return response.data;
-    },
-  });
+    }
+  })
+}
+
+export function plans() {
+  return useQuery({
+    queryKey: ["plans"],
+    queryFn: async () => {
+      const response = await http.get<{ data: Plan[], total: number }>(BILLING_PLANS);
+      return response.data;
+    }
+  })
 }
