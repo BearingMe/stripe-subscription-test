@@ -1,4 +1,5 @@
 import type { StripePaymentMethodsService } from "../../stripe/payment-methods.service";
+import type { SetupIntentDTO } from "../../../../shared/schemas/setup-intent.schema";
 import { HttpError } from "../../common/exceptions/HttpError";
 import { extractErrorMessage } from "../../common/utils/errors";
 
@@ -20,6 +21,5 @@ class PaymentMethodsService {
 }
 
 import stripePaymentMethodsServiceInjectable from "../../stripe/payment-methods.service";
-import type { SetupIntentDTO } from "./setup-intent.schema";
 const paymentMethodsService = new PaymentMethodsService(stripePaymentMethodsServiceInjectable);
 export default paymentMethodsService;

@@ -1,5 +1,5 @@
-import type { User } from "./user.entity";
-import type { CreateUserDTO } from "./create-user.schema";
+import type { User } from "../../../shared/entities/user.entity"
+import type { CreateUserDTO } from "../../../shared/schemas/create-user.schema";
 import { PrismaClient } from "../../generated/prisma";
 
 const prisma = new PrismaClient();

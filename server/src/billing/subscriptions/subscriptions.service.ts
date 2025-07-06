@@ -1,22 +1,8 @@
 import type { StripeSubscriptionsService } from "../../stripe/subscriptions.service";
+import type { Subscription } from "../../../../shared/entities/subscription.entity";
+import type { CreateSubscriptionDTO } from "../../../../shared/schemas/create-subscripton.schema";
 import { HttpError } from "../../common/exceptions/HttpError";
 import { extractErrorMessage } from "../../common/utils/errors";
-
-// return {
-//   stripeId: s.id,
-//   status: s.status,
-//   cancelAtPeriodEnd: s.cancel_at_period_end,
-//   metadata: s.metadata,
-//   createdAt: new Date(s.created * 1000),
-// };
-
-// export interface Subscription {
-//   uuid: string;
-//   status: Stripe.Subscription.Status;
-//   metadata: Record<string, string>;
-//   cancelAtPeriodEnd: boolean;
-//   createdAt: Date;
-// }
 
 class SubscriptionsService {
   constructor(private readonly stripeSubscriptionsService: StripeSubscriptionsService) {}
@@ -64,7 +50,5 @@ class SubscriptionsService {
 }
 
 import stripeSubscriptionsServiceInjectable from "../../stripe/subscriptions.service";
-import type { Subscription } from "./subscription.interface";
-import type { CreateSubscriptionDTO } from "./create-subscripton.schema";
 const subscriptionsService = new SubscriptionsService(stripeSubscriptionsServiceInjectable);
 export default subscriptionsService;

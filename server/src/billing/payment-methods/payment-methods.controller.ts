@@ -2,7 +2,7 @@ import paymentMethodsService from "./payment-methods.service";
 import { Router } from "express";
 import { createResponseObject } from "../../common/utils/responses";
 import { tryParseAsync } from "../../common/lib/validator";
-import { SetupIntentSchema } from "./setup-intent.schema";
+import { SetupIntentSchema } from "../../../../shared/schemas/setup-intent.schema";
 
 const paymentMethodsController = Router();
 

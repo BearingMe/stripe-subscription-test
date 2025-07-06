@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { CreateUserSchema } from "./create-user.schema";
 import { tryParseAsync } from "../common/lib/validator";
 import { createResponseObject } from "../common/utils/responses";
+import { CreateUserSchema } from "../../../shared/schemas/create-user.schema";
 import usersService from "./users.service";
 
 const usersController = Router();

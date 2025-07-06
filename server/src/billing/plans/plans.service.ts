@@ -1,5 +1,5 @@
 import type { StripePlansService } from "../../stripe/plans.service";
-import type { Plan } from "./plan.interface";
+import type { Plan } from "../../../../shared/entities/plan.entity";
 import { HttpError } from "../../common/exceptions/HttpError";
 import { extractErrorMessage } from "../../common/utils/errors";
 

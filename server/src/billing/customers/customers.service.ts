@@ -1,5 +1,5 @@
-import type { Customer } from "./customer.entity";
-import type { CreateCustomerDTO } from "./create-customer.schema";
+import type { Customer } from "../../../../shared/entities/customer.entity";
+import type { CreateCustomerDTO } from "../../../../shared/schemas/create-customer.schema";
 import type { StripeCustomerService } from "../../stripe/customers.service";
 import { HttpError } from "../../common/exceptions/HttpError";
 import { extractErrorMessage } from "../../common/utils/errors";
@@ -31,6 +31,5 @@ export class CustomerService {
   }
 }
 
-// TODO: unit test
 import stripeCustomerServiceInjectable from "../../stripe/customers.service";
 export default new CustomerService(stripeCustomerServiceInjectable);

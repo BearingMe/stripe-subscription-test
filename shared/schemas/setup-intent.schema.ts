@@ -1,4 +1,4 @@
-import { createZodObject, z } from "../../common/lib/validator";
+import { createZodObject, z } from "../../server/src/common/lib/validator";
 
 export const SetupIntentSchema = createZodObject({
   stripeCustomerId: z.string(),
