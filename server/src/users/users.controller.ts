@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { tryParseAsync } from "../common/lib/validator";
-import { createResponseObject } from "../common/utils/responses";
+import { createResponseList, createResponseObject } from "../common/utils/responses";
 import { CreateUserSchema } from "../../../shared/schemas/create-user.schema";
 import usersService from "./users.service";
 
@@ -8,7 +8,8 @@ const usersController = Router();
 
 usersController.get("/", async (_, res) => {
   const users = await usersService.findAll();
-  res.json(users);
+  const response = createResponseList(users, users.length);
+  res.json(response);
 });
 
 usersController.post("/", async (req, res) => {
