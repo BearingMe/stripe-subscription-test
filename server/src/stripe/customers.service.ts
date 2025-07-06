@@ -2,7 +2,7 @@ import type { CreateStripeCustomerDTO } from "./dtos/create-customer.dto";
 import { stripe } from "../common/lib/stripe";
 import { mapStripeCustomerToEntity } from "./mappers/customer.mapper";
 
-class StripeCustomerService {
+export class StripeCustomerService {
   async create(data: CreateStripeCustomerDTO) {
     const { systemUserName, systemUserEmail, systemUserUuid } = data;
 
@@ -16,5 +16,5 @@ class StripeCustomerService {
   }
 }
 
-const stripeCustomerService = new StripeCustomerService();
-export default stripeCustomerService;
+const stripeCustomerServiceInjectable = new StripeCustomerService();
+export default stripeCustomerServiceInjectable;

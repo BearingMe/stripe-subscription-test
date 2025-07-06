@@ -2,7 +2,7 @@ import type { CreateStripeSubscriptionDTO } from "./dtos/create-subscription.dto
 import { stripe } from "../common/lib/stripe";
 import { mapStripeSubscriptionToEntity } from "./mappers/subscription.mapper";
 
-class StripeSubscriptionsService {
+export class StripeSubscriptionsService {
   async findManyByCustomerId(id: string) {
     const foundSubscriptions = await stripe.subscriptions.list({ customer: id });
     return foundSubscriptions.data.map(mapStripeSubscriptionToEntity);
@@ -21,5 +21,5 @@ class StripeSubscriptionsService {
   }
 }
 
-const stripeSubscriptionsService = new StripeSubscriptionsService();
-export default stripeSubscriptionsService;
+const stripeSubscriptionsServiceInjectable = new StripeSubscriptionsService();
+export default stripeSubscriptionsServiceInjectable;
