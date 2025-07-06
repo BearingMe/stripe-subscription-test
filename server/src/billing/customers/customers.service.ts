@@ -4,7 +4,7 @@ import type { StripeCustomerService } from "../../stripe/customers.service";
 import { HttpError } from "../../common/exceptions/HttpError";
 import { extractErrorMessage } from "../../common/utils/errors";
 
-class CustomerService {
+export class CustomerService {
   constructor(private stripeCustomerService: StripeCustomerService) {}
 
   async create(data: CreateCustomerDTO): Promise<Customer> {
