@@ -1,29 +1,28 @@
-import type { CreateCustomer } from "./create-customer.schema";
 import type { Customer } from "./customer.entity";
-import type { Timestamp } from "../../common/types/misc";
+import type { CreateCustomerDTO } from "./create-customer.schema";
+import type { StripeCustomerService } from "../../stripe/customers.service";
 import { HttpError } from "../../common/exceptions/HttpError";
-import { stripe } from "../../common/lib/stripe";
 import { extractErrorMessage } from "../../common/utils/errors";
 
 class CustomerService {
-  async create(data: CreateCustomer): Promise<Customer> {
-    const { name, email, uuid } = data;
+  constructor(private stripeCustomerService: StripeCustomerService) {}
+
+  async create(data: CreateCustomerDTO): Promise<Customer> {
+    const { uuid, name, email } = data;
 
     try {
-      const createStripeCustomer = await stripe.customers.create({
-        name,
-        email,
-        metadata: { uuid },
+      const createStripeCustomer = await this.stripeCustomerService.create({
+        systemUserUuid: uuid,
+        systemUserName: name,
+        systemUserEmail: email,
       });
 
       return {
-        id: createStripeCustomer.id,
-        email: createStripeCustomer.email!,
-        name: createStripeCustomer.name!,
-        metadata: createStripeCustomer.metadata,
-        created: createStripeCustomer.created as Timestamp,
+        uuid,
+        name: createStripeCustomer.systemName,
+        email: createStripeCustomer.systemEmail,
+        ...createStripeCustomer,
       };
-      //
     } catch (err) {
       // TODO: improve this error treatment with more cases
       const msg = extractErrorMessage(err);
@@ -32,5 +31,6 @@ class CustomerService {
   }
 }
 
-const customerService = new CustomerService();
-export default customerService;
+// TODO: unit test
+import stripeCustomerServiceInjectable from "../../stripe/customers.service";
+export default new CustomerService(stripeCustomerServiceInjectable);

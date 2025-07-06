@@ -6,4 +6,4 @@ export const CreateCustomerSchema = createZodObject({
   email: z.string(),
 });
 
-export type CreateCustomer = z.infer<typeof CreateCustomerSchema>;
+export type CreateCustomerDTO = z.infer<typeof CreateCustomerSchema>;

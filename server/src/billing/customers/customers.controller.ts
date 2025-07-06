@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { createResponseObject } from "../../common/utils/responses";
 import { tryParseAsync } from "../../common/lib/validator";
-import customerService from "./customers.service";
 import { CreateCustomerSchema } from "./create-customer.schema";
+import customerService from "./customers.service";
 
 const customersController = Router();
 
