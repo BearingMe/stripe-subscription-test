@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun run --watch src/app.ts"
+    "dev": "bun run --watch src/app.ts",
+    "test": "jest"
   },
   "dependencies": {
     "@prisma/client": "^6.11.0",
@@ -27,12 +28,15 @@
     "@types/bun": "latest",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.8",
     "eslint": "^9.30.1",
     "eslint-config-prettier": "^10.1.5",
     "globals": "^16.3.0",
+    "jest": "^30.0.4",
     "prettier": "3.6.2",
     "prisma": "^6.11.0",
+    "ts-jest": "^29.4.0",
     "typescript-eslint": "^8.35.1"
   },
   "packageManager": "bun@1.2.8"
